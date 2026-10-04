@@ -2,8 +2,6 @@
 
 A student project using Node.js, Express 5 and MongoDB Atlas. It implements create, read, update, replace and delete operations and an aggregation query with the official `mongodb` driver, behind an MVC-style REST API.
 
-Repository: [Bleachigo/node-express-mongodb-67](https://github.com/Bleachigo/node-express-cursors-aggregators-67)
-
 ## Technologies
 
 - **Node.js** 20.11 or newer (`--env-file`, `import.meta.dirname`)
@@ -33,6 +31,28 @@ On startup the server connects to MongoDB, pings the database, and only then sta
 | `MONGODB_DB_NAME` | Yes      | Database name. Holds the `users`, `balloons` and `sessions` collections. |
 
 See `.env.example` for the expected format.
+
+## Running with Docker
+
+`compose.yaml` starts two containers: `app` (built from the `Dockerfile`) and `mongo` (the official `mongo:8.0` image). Inside Compose the app connects to `mongodb://mongo:27017/app_db` instead of Atlas.
+
+```bash
+cp .env.example .env           # SESSION_SECRET and MONGODB_DB_NAME are read from here
+docker compose up --build      # build the image and start both containers
+```
+
+- App: <http://localhost:3000>
+- MongoDB: port `27018` on your machine (`27017` inside the container). It is published so you can connect **MongoDB Compass** to `mongodb://localhost:27018` and watch the database change while you use the app.
+- The project folder is bind-mounted into the container and the server runs with `node --watch`, so saved changes restart the server without restarting the container.
+- Database data is kept in the `mongo_data` volume between runs.
+
+| Command                        | What it does                                                 |
+| ------------------------------ | ------------------------------------------------------------ |
+| `docker compose up -d`         | Start in the background (no rebuild)                         |
+| `docker compose logs -f app`   | Follow the app's logs                                        |
+| `docker compose down`          | Stop and remove the containers, keep the data                |
+| `docker compose down -v`       | Also delete the MongoDB data volume                          |
+| `docker compose up --build -V` | Rebuild after changing `package.json` (fresh `node_modules`) |
 
 ## Project structure
 
