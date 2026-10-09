@@ -47,7 +47,7 @@ export const createApp = () => {
   app.use(
     session({
       store: MongoStore.create({
-        mongoUrl: process.env.MONGODB_URI,
+        client: mongoose.connection.getClient(),
         dbName: process.env.MONGODB_DB_NAME,
         collectionName: 'sessions',
         ttl: MAX_AGE / 1000,
