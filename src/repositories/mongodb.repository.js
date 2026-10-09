@@ -1,4 +1,4 @@
-import { getCollection } from '../config/mongodb.config.js';
+// import { getCollection } from '../config/mongodb.config.js';
 
 export const mongoRepository = {
   async insertDocument(collectionName, document) {

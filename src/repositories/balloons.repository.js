@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { ObjectId } from 'mongodb';
 import { mongoRepository } from './mongodb.repository.js';
-import { getCollection } from '../config/mongodb.config.js';
+// import { getCollection } from '../config/mongodb.config.js';
 
 const COLLECTION = 'balloons';
 const toBalloon = ({ _id, ...rest }) => ({ ...rest, id: _id.toString() });
