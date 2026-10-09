@@ -9,7 +9,7 @@ try {
   console.log('MongoDB connected successfully');
 
   const app = createApp();
-  app.listen(port, () => {
+  const server = app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
   });
 
