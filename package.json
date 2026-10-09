@@ -1,11 +1,11 @@
 {
-  "name": "express-server-60",
+  "name": "express-mongoose-70",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node --env-file=.env server.js",
-    "dev": "node --watch --env-file=.env server.js"
+    "start": "node --env-file-if-exists=.env server.js",
+    "dev": "node --watch --env-file-if-exists=.env server.js"
   },
   "keywords": [],
   "author": "",
@@ -20,7 +20,7 @@
     "express": "^5.2.1",
     "express-session": "^1.19.0",
     "helmet": "^8.3.0",
-    "mogoose": "^0.0.1-security",
+    "mongoose": "^9.11.1",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
     "pug": "^3.0.4"
