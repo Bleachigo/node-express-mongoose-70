@@ -13,7 +13,7 @@ authRouter.post(
   '/login',
   validateUserInput,
   authenticateLocal,
-  authController.loginUser,
+  // authController.loginUser,
 );
 authRouter.post('/logout', requireAuth, authController.logout);
 authRouter.get('/me', requireAuth, authController.me);

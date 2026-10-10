@@ -12,15 +12,15 @@ export const authController = {
     }
   },
 
-  async loginUser(req, res) {
-    res.status(200).json({
-      message: 'Login successful',
-      user: {
-        id: req.user.id,
-        email: req.user.email,
-      },
-    });
-  },
+  // async loginUser(req, res) {
+  //   res.status(200).json({
+  //     message: 'Login successful',
+  //     user: {
+  //       id: req.user.id,
+  //       email: req.user.email,
+  //     },
+  //   });
+  // },
 
   async me(req, res) {
     res.json({
