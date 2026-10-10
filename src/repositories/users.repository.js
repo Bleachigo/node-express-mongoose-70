@@ -1,5 +1,6 @@
 import { ObjectId } from 'mongodb';
 import { mongoRepository } from './mongodb.repository.js';
+import { User } from '../models/user.model.js';
 
 const COLLECTION = 'users';
 const PUBLIC_FIELDS = { email: 1, role: 1 };
@@ -54,14 +55,18 @@ export const usersRepository = {
     );
   },
 
+  // async findCredentialsByEmail(email) {
+  //   return toUser(
+  //     await mongoRepository.findDocument(
+  //       COLLECTION,
+  //       { email },
+  //       { projection: { ...PUBLIC_FIELDS, passwordHash: 1 } },
+  //     ),
+  //   );
+  // },
+
   async findCredentialsByEmail(email) {
-    return toUser(
-      await mongoRepository.findDocument(
-        COLLECTION,
-        { email },
-        { projection: { ...PUBLIC_FIELDS, passwordHash: 1 } },
-      ),
-    );
+    return toUser(await User.findOne({ email }).select('+passwordHash').lean());
   },
 
   async createOne(user) {
