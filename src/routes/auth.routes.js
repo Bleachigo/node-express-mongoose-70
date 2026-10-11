@@ -8,12 +8,12 @@ import {
 
 export const authRouter = express.Router();
 
-authRouter.post('/register', validateUserInput, authController.registerUser);
+authRouter.post('/register', authController.registerUser);
 authRouter.post(
   '/login',
   validateUserInput,
   authenticateLocal,
-  // authController.loginUser,
+  authController.loginUser,
 );
 authRouter.post('/logout', requireAuth, authController.logout);
 authRouter.get('/me', requireAuth, authController.me);
