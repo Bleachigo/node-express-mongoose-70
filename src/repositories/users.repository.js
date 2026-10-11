@@ -21,32 +21,12 @@ const toUser = (doc) => {
 };
 
 export const usersRepository = {
-  async findAll(options) {
-    const docs = await mongoRepository.findDocuments(
-      COLLECTION,
-      {},
-      withDefaults(options),
-    );
-
-    return docs.map(toUser);
+  async findAll() {
+    return await User.find();
   },
 
-  // async findById(id, options) {
-  //   const _id = toObjectId(id);
-  //
-  //   if (!_id) return null;
-  //
-  //   return toUser(
-  //     await mongoRepository.findDocument(
-  //       COLLECTION,
-  //       { _id },
-  //       withDefaults(options),
-  //     ),
-  //   );
-  // },
-
   async findById(id) {
-    return await User.findById({ id });
+    return await User.findById(id);
   },
 
   async findByEmail(email) {
