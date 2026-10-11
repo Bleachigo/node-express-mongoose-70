@@ -2,7 +2,6 @@ import { Schema, model } from 'mongoose';
 
 const userSchema = new Schema(
   {
-    name: { type: String, trim: true },
     email: {
       type: String,
       required: true,
@@ -18,7 +17,17 @@ const userSchema = new Schema(
       default: 'user',
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    toJSON: {
+      virtuals: true,
+      versionKey: false,
+      transform(doc, ret) {
+        delete ret._id;
+        delete ret.passwordHash;
+      },
+    },
+  },
 );
 
 export const User = model('User', userSchema);
