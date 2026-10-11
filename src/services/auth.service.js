@@ -15,7 +15,6 @@ export const authService = {
     const created = await usersRepository.createOne({
       email,
       passwordHash,
-      role: 'user',
     });
 
     return { user: created };
