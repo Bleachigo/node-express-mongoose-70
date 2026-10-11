@@ -31,50 +31,34 @@ export const usersRepository = {
     return docs.map(toUser);
   },
 
-  async findById(id, options) {
-    const _id = toObjectId(id);
-
-    if (!_id) return null;
-
-    return toUser(
-      await mongoRepository.findDocument(
-        COLLECTION,
-        { _id },
-        withDefaults(options),
-      ),
-    );
-  },
-
-  async findByEmail(email, options) {
-    return toUser(
-      await mongoRepository.findDocument(
-        COLLECTION,
-        { email },
-        withDefaults(options),
-      ),
-    );
-  },
-
-  // async findCredentialsByEmail(email) {
+  // async findById(id, options) {
+  //   const _id = toObjectId(id);
+  //
+  //   if (!_id) return null;
+  //
   //   return toUser(
   //     await mongoRepository.findDocument(
   //       COLLECTION,
-  //       { email },
-  //       { projection: { ...PUBLIC_FIELDS, passwordHash: 1 } },
+  //       { _id },
+  //       withDefaults(options),
   //     ),
   //   );
   // },
 
+  async findById(id) {
+    return await User.findById({ id });
+  },
+
+  async findByEmail(email) {
+    return await User.findOne({ email });
+  },
+
   async findCredentialsByEmail(email) {
-    return toUser(await User.findOne({ email }).select('+passwordHash').lean());
+    return await User.findOne({ email }).select('+passwordHash');
   },
 
   async createOne(user) {
-    const { passwordHash, ...created } = toUser(
-      await mongoRepository.insertDocument(COLLECTION, user),
-    );
-
-    return created;
+    return await User.create(user);
   },
 
   async update(id, changes, options) {
