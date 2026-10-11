@@ -41,19 +41,8 @@ export const usersRepository = {
     return await User.create(user);
   },
 
-  async update(id, changes, options) {
-    const _id = toObjectId(id);
-
-    if (!_id) return null;
-
-    return toUser(
-      await mongoRepository.updateDocument(
-        COLLECTION,
-        { _id },
-        changes,
-        withDefaults(options),
-      ),
-    );
+  async update(id, changes) {
+    return await User.findByIdAndUpdate(id, changes);
   },
 
   async replace(id, user, options) {
