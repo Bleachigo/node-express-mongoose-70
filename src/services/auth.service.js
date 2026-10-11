@@ -28,7 +28,7 @@ export const verifyCredentials = async (email, password) => {
 
   if (!(await verifyPassword(password, user.passwordHash))) return null;
 
-  const { passwordHash, ...publicUser } = user;
+  // const { passwordHash, ...publicUser } = user;
 
-  return publicUser;
+  return user.toJSON();
 };
