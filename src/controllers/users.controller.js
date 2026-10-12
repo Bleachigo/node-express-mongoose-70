@@ -27,8 +27,6 @@ export const userController = {
     }
   },
 
-  // async getUserByEmail(req, res, next) {},
-
   async putUserById(req, res, next) {
     try {
       const { userId } = req.params;
