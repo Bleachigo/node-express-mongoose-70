@@ -28,8 +28,12 @@ export const userService = {
   },
 
   async replaceUser(userId, userData) {
+    if (!userData.email || !userData.password) {
+      throw new AppError('email and password are required', 400);
+    }
+
     const replacedUser = await usersRepository.replace(userId, {
-      email: userData.email.trim().toLowerCase(),
+      email: userData.email,
       passwordHash: await hashPassword(userData.password),
       role: userData.role,
     });
