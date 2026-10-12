@@ -1,24 +1,4 @@
-import { ObjectId } from 'mongodb';
-import { mongoRepository } from './mongodb.repository.js';
 import { User } from '../models/user.model.js';
-
-const COLLECTION = 'users';
-const PUBLIC_FIELDS = { email: 1, role: 1 };
-
-const withDefaults = (options = {}) => ({
-  projection: PUBLIC_FIELDS,
-  ...options,
-});
-
-const toObjectId = (id) => (ObjectId.isValid(id) ? new ObjectId(id) : null);
-
-const toUser = (doc) => {
-  if (!doc) return null;
-
-  const { _id, ...rest } = doc;
-
-  return { ...rest, id: _id.toString() };
-};
 
 export const usersRepository = {
   async findAll() {
@@ -42,35 +22,20 @@ export const usersRepository = {
   },
 
   async update(id, changes) {
-    return await User.findByIdAndUpdate(id, changes);
+    return await User.findByIdAndUpdate(id, changes, {
+      returnDocument: 'after',
+      runValidators: true,
+    });
   },
 
-  async replace(id, user, options) {
-    const _id = toObjectId(id);
-
-    if (!_id) return null;
-
-    return toUser(
-      await mongoRepository.replaceDocument(
-        COLLECTION,
-        { _id },
-        user,
-        withDefaults(options),
-      ),
-    );
+  async replace(id, user) {
+    return await User.findOneAndReplace({ _id: id }, user, {
+      returnDocument: 'after',
+      runValidators: true,
+    });
   },
 
   async delete(id) {
-    const _id = toObjectId(id);
-
-    if (!_id) return null;
-
-    return toUser(
-      await mongoRepository.deleteDocument(
-        COLLECTION,
-        { _id },
-        { projection: PUBLIC_FIELDS },
-      ),
-    );
+    return await User.findByIdAndDelete(id);
   },
 };
