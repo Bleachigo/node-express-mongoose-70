@@ -23,6 +23,11 @@ export const errorHandler = (err, req, res, next) => {
     message = `This ${Object.keys(err.keyValue)[0]} already exists`;
   }
 
+  if (err.type === 'entity.parse.failed') {
+    statusCode = 400;
+    message = 'Invalid JSON in request body';
+  }
+
   if (statusCode >= 500) console.error(err);
   res.status(statusCode).type('text/plain').send(message);
 };
