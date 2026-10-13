@@ -23,10 +23,9 @@ const toBalloonDoc = (item, index) => {
   }
 
   return {
-    color: color.trim().toLowerCase(),
+    color,
     shape,
     size,
-    createdAt: new Date(),
   };
 };
 
@@ -53,14 +52,7 @@ const toFilter = (query = {}) => {
 
 export const balloonsService = {
   async createBalloons(items) {
-    if (!Array.isArray(items) || !items.length || items.length > MAX_BATCH) {
-      throw new AppError(
-        `Body must be an array of 1-${MAX_BATCH} balloons`,
-        400,
-      );
-    }
-
-    return balloonsRepository.createMany(items.map(toBalloonDoc));
+    return balloonsRepository.createMany(items);
   },
 
   async updateOneBalloon(balloonId, updates) {
