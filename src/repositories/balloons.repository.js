@@ -2,16 +2,21 @@ import 'dotenv/config';
 import { ObjectId } from 'mongodb';
 import { mongoRepository } from './mongodb.repository.js';
 // import { getCollection } from '../config/mongodb.config.js';
+import { Balloon } from '../models/balloon.model.js';
 
 const COLLECTION = 'balloons';
 const toBalloon = ({ _id, ...rest }) => ({ ...rest, id: _id.toString() });
 const toObjectId = (id) => (ObjectId.isValid(id) ? new ObjectId(id) : null);
 
 export const balloonsRepository = {
-  async createMany(balloons) {
-    const docs = await mongoRepository.insertDocuments(COLLECTION, balloons);
+  // async createMany(balloons) {
+  //   const docs = await mongoRepository.insertDocuments(COLLECTION, balloons);
+  //
+  //   return docs.map(toBalloon);
+  // },
 
-    return docs.map(toBalloon);
+  async createMany(items) {
+    return await Balloon.create(items);
   },
 
   async updateBalloon(id, changes, options) {
@@ -84,7 +89,6 @@ export const balloonsRepository = {
           avgPrice: { $avg: '$price' },
           minPrice: { $min: '$price' },
           maxPrice: { $max: '$price' },
-          names: { $addToSet: '$name' },
         },
       },
       {
@@ -96,7 +100,6 @@ export const balloonsRepository = {
           avgPrice: { $round: ['$avgPrice', 2] },
           minPrice: 1,
           maxPrice: 1,
-          uniqueNames: { $size: '$names' },
         },
       },
       { $sort: { count: -1 } },
