@@ -1,8 +1,8 @@
 import 'dotenv/config';
 import { ObjectId } from 'mongodb';
 import { mongoRepository } from './mongodb.repository.js';
-// import { getCollection } from '../config/mongodb.config.js';
 import { Balloon } from '../models/balloon.model.js';
+import { UPDATABLE_FIELDS } from '../models/balloon.model.js';
 
 const COLLECTION = 'balloons';
 const toBalloon = ({ _id, ...rest }) => ({ ...rest, id: _id.toString() });
@@ -13,19 +13,6 @@ export const balloonsRepository = {
     return await Balloon.create(items);
   },
 
-  // async updateBalloon(id, changes, options) {
-  //   const _id = toObjectId(id);
-  //
-  //   if (!_id) return null;
-  //
-  //   return await mongoRepository.updateOne(
-  //     COLLECTION,
-  //     { _id },
-  //     changes,
-  //     options,
-  //   );
-  // },
-
   async updateBalloon(id, changes) {
     return await Balloon.findByIdAndUpdate(id, changes, {
       returnDocument: 'after',
@@ -33,17 +20,39 @@ export const balloonsRepository = {
     });
   },
 
-  async replaceBalloon(id, changes, options) {
-    const _id = toObjectId(id);
+  // async replaceBalloon(id, changes, options) {
+  //   const _id = toObjectId(id);
+  //
+  //   if (!_id) return null;
+  //
+  //   return await mongoRepository.replaceOne(
+  //     COLLECTION,
+  //     { _id },
+  //     changes,
+  //     options,
+  //   );
+  // },
 
-    if (!_id) return null;
+  async replaceBalloon(id, fields) {
+    const fieldsToSet = {};
+    const fieldsToUnset = {};
 
-    return await mongoRepository.replaceOne(
-      COLLECTION,
-      { _id },
-      changes,
-      options,
-    );
+    for (const field of UPDATABLE_FIELDS) {
+      if (fields[field] !== undefined) {
+        fieldsToSet[field] = fields[field];
+      } else {
+        fieldsToUnset[field] = '';
+      }
+    }
+
+    const update = {};
+    if (Object.keys(fieldsToSet).length) update.$set = fieldsToSet;
+    if (Object.keys(fieldsToUnset).length) update.$unset = fieldsToUnset;
+
+    return await Balloon.findByIdAndUpdate(id, update, {
+      returnDocument: 'after',
+      runValidators: true,
+    });
   },
 
   async updateBalloons(query, changes, options) {
