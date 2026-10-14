@@ -9,27 +9,28 @@ const toBalloon = ({ _id, ...rest }) => ({ ...rest, id: _id.toString() });
 const toObjectId = (id) => (ObjectId.isValid(id) ? new ObjectId(id) : null);
 
 export const balloonsRepository = {
-  // async createMany(balloons) {
-  //   const docs = await mongoRepository.insertDocuments(COLLECTION, balloons);
-  //
-  //   return docs.map(toBalloon);
-  // },
-
   async createMany(items) {
     return await Balloon.create(items);
   },
 
-  async updateBalloon(id, changes, options) {
-    const _id = toObjectId(id);
+  // async updateBalloon(id, changes, options) {
+  //   const _id = toObjectId(id);
+  //
+  //   if (!_id) return null;
+  //
+  //   return await mongoRepository.updateOne(
+  //     COLLECTION,
+  //     { _id },
+  //     changes,
+  //     options,
+  //   );
+  // },
 
-    if (!_id) return null;
-
-    return await mongoRepository.updateOne(
-      COLLECTION,
-      { _id },
-      changes,
-      options,
-    );
+  async updateBalloon(id, changes) {
+    return await Balloon.findByIdAndUpdate(id, changes, {
+      returnDocument: 'after',
+      runValidators: true,
+    });
   },
 
   async replaceBalloon(id, changes, options) {

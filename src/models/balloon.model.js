@@ -43,4 +43,19 @@ const balloonSchema = new Schema(
   },
 );
 
+const SERVER_FIELDS = ['_id', '__v', 'createdAt', 'updatedAt'];
+
+// Must contain ["color", "shape", "size", "price"]
+export const UPDATABLE_FIELDS = Object.keys(balloonSchema.paths).filter(
+  (path) => !SERVER_FIELDS.includes(path),
+);
+
+// Must contain ["color", "shape", "size"]
+export const REQUIRED_FIELDS = balloonSchema.requiredPaths();
+
+// Suppose to contain ["price"]
+export const OPTIONAL_FIELDS = UPDATABLE_FIELDS.filter(
+  (path) => !REQUIRED_FIELDS.includes(path),
+);
+
 export const Balloon = model('Balloon', balloonSchema);
