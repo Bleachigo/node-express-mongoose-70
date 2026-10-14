@@ -56,27 +56,26 @@ export const balloonsService = {
   },
 
   async updateOneBalloon(balloonId, updates) {
-    const result = await balloonsRepository.updateBalloon(balloonId, updates);
+    const balloon = await balloonsRepository.updateBalloon(balloonId, updates);
 
-    if (!result?.matchedCount) {
+    if (!balloon) {
       throw new AppError(`Balloon ${balloonId} not found`, 404);
     }
 
-    const { matchedCount, modifiedCount } = result;
+    if (!updates || Object.keys(updates).length === 0) {
+      throw new AppError('No fields to update', 400);
+    }
 
-    return { matchedCount, modifiedCount };
+    return balloon;
   },
 
-  async replaceOneBalloon(balloonId, updates) {
-    const result = await balloonsRepository.replaceBalloon(balloonId, updates);
+  async replaceOneBalloon(balloonId, fields) {
+    const balloon = await balloonsRepository.replaceBalloon(balloonId, fields);
 
-    if (!result?.matchedCount) {
+    if (!balloon) {
       throw new AppError(`Balloon ${balloonId} not found`, 404);
     }
-
-    const { matchedCount, modifiedCount } = result;
-
-    return { matchedCount, modifiedCount };
+    return balloon;
   },
 
   async updateManyBalloons(query, updates) {
