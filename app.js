@@ -5,7 +5,6 @@ import ejs from 'ejs';
 import express from 'express';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
-// import { client } from './src/config/mongodb.config.js';
 import mongoose from 'mongoose';
 import passport from './src/config/passport.config.js';
 import path from 'node:path';
