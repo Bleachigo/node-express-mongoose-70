@@ -20,19 +20,6 @@ export const balloonsRepository = {
     });
   },
 
-  // async replaceBalloon(id, changes, options) {
-  //   const _id = toObjectId(id);
-  //
-  //   if (!_id) return null;
-  //
-  //   return await mongoRepository.replaceOne(
-  //     COLLECTION,
-  //     { _id },
-  //     changes,
-  //     options,
-  //   );
-  // },
-
   async replaceBalloon(id, fields) {
     const fieldsToSet = {};
     const fieldsToUnset = {};
@@ -55,13 +42,11 @@ export const balloonsRepository = {
     });
   },
 
-  async updateBalloons(query, changes, options) {
-    return await mongoRepository.updateDocuments(
-      COLLECTION,
-      query,
-      changes,
-      options,
-    );
+  async updateBalloons(query, changes) {
+    return await Balloon.updateMany(query, changes, {
+      returnDocument: 'after',
+      runValidators: true,
+    });
   },
 
   async deleteBalloons(filter) {
@@ -119,17 +104,21 @@ export const balloonsRepository = {
   },
 
   async randomizePrices(min = 10, max = 200) {
-    return getCollection(COLLECTION).updateMany({ price: { $exists: false } }, [
-      {
-        $set: {
-          price: {
-            $round: [
-              { $add: [min, { $multiply: [{ $rand: {} }, max - min] }] },
-              2,
-            ],
+    return Balloon.updateMany(
+      { price: { $exists: false } },
+      [
+        {
+          $set: {
+            price: {
+              $round: [
+                { $add: [min, { $multiply: [{ $rand: {} }, max - min] }] },
+                2,
+              ],
+            },
           },
         },
-      },
-    ]);
+      ],
+      { updatePipeline: true },
+    );
   },
 };
