@@ -50,15 +50,11 @@ export const balloonsRepository = {
   },
 
   async deleteBalloons(filter) {
-    return mongoRepository.deleteDocuments(COLLECTION, filter);
+    return Balloon.deleteMany(filter);
   },
 
   async deleteBalloon(id) {
-    const _id = toObjectId(id);
-
-    if (!_id) return null;
-
-    return mongoRepository.deleteDocument(COLLECTION, { _id });
+    return Balloon.deleteOne({ _id: id });
   },
 
   async getStats({ shape, minPrice, maxPrice, since } = {}) {
@@ -100,7 +96,7 @@ export const balloonsRepository = {
       { $sort: { count: -1 } },
     ];
 
-    return getCollection(COLLECTION).aggregate(pipeline).toArray();
+    return Balloon.aggregate(pipeline);
   },
 
   async randomizePrices(min = 10, max = 200) {

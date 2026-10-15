@@ -101,7 +101,7 @@ export const balloonsService = {
 
     if (!result?.deletedCount) {
       throw new AppError(
-        `Balloons with ${Object.keys(query)} field/s not found`,
+        `No documents were deleted by your query: ${JSON.stringify(query)}`,
         404,
       );
     }
