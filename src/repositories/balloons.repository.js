@@ -1,12 +1,6 @@
 import 'dotenv/config';
-import { ObjectId } from 'mongodb';
-import { mongoRepository } from './mongodb.repository.js';
 import { Balloon } from '../models/balloon.model.js';
 import { UPDATABLE_FIELDS } from '../models/balloon.model.js';
-
-const COLLECTION = 'balloons';
-const toBalloon = ({ _id, ...rest }) => ({ ...rest, id: _id.toString() });
-const toObjectId = (id) => (ObjectId.isValid(id) ? new ObjectId(id) : null);
 
 export const balloonsRepository = {
   async createMany(items) {
