@@ -86,7 +86,7 @@ export const balloonsService = {
 
     if (!result?.matchedCount) {
       throw new AppError(
-        `Balloons with ${Object.keys(query)} field/s not found`,
+        `No matches were found by your query ${JSON.stringify(query)}`,
         404,
       );
     }
